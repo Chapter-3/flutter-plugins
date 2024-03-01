@@ -1475,7 +1475,7 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
             result,
             ACTIVE_ENERGY_BURNED,
             AGGREGATE_CALORIES_COUNT,
-            "calories",
+            "merge_calories_expended",
             false
         )
     }
@@ -1495,7 +1495,7 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
             result,
             DISTANCE_DELTA,
             AGGREGATE_DISTANCE_COUNT,
-            "distance",
+            "merge_distance_delta",
             false
         )
     }
