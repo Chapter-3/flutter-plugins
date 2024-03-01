@@ -619,6 +619,21 @@ class HealthFactory {
     return distance;
   }
 
+  Future<int?> getTotalMoveMinutesInInterval(
+    DateTime startTime,
+    DateTime endTime,
+  ) async {
+    final args = <String, dynamic>{
+      'startTime': startTime.millisecondsSinceEpoch,
+      'endTime': endTime.millisecondsSinceEpoch
+    };
+    final moveMinutes = await _channel.invokeMethod<int?>(
+      'getTotalMoveMinutesInInterval',
+      args,
+    );
+    return moveMinutes;
+  }
+
   /// Assigns numbers to specific [HealthDataType]s.
   int _alignValue(HealthDataType type) {
     switch (type) {
