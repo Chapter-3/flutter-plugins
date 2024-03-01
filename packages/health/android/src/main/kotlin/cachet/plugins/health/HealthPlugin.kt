@@ -92,6 +92,7 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
     private var BLOOD_OXYGEN = "BLOOD_OXYGEN"
     private var BLOOD_GLUCOSE = "BLOOD_GLUCOSE"
     private var MOVE_MINUTES = "MOVE_MINUTES"
+    private var AGGREGATE_MOVE_MINUTES = "AGGREGATE_MOVE_MINUTES"
     private var DISTANCE_DELTA = "DISTANCE_DELTA"
     private var AGGREGATE_DISTANCE_COUNT = "AGGREGATE_DISTANCE_COUNT"
     private var WATER = "WATER"
@@ -449,6 +450,7 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
             BLOOD_OXYGEN -> HealthDataTypes.TYPE_OXYGEN_SATURATION
             BLOOD_GLUCOSE -> HealthDataTypes.TYPE_BLOOD_GLUCOSE
             MOVE_MINUTES -> DataType.TYPE_MOVE_MINUTES
+            AGGREGATE_MOVE_MINUTES -> DataType.AGGREGATE_MOVE_MINUTES
             DISTANCE_DELTA -> DataType.TYPE_DISTANCE_DELTA
             AGGREGATE_DISTANCE_COUNT -> DataType.AGGREGATE_DISTANCE_DELTA
             WATER -> DataType.TYPE_HYDRATION
@@ -1498,6 +1500,29 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
         )
     }
 
+    private fun getTotalMoveMinutesInInterval(call: MethodCall, result: Result) {
+        val start = call.argument<Long>("startTime")!!
+        val end = call.argument<Long>("endTime")!!
+
+        /* 
+            // Health Connect Not Implemented for now
+            if (useHealthConnectIfAvailable && healthConnectAvailable) {
+                getDistanceHealthConnect(start, end, result)
+                return
+            }
+        */
+
+        getTotalInInterval(
+            start,
+            end,
+            result,
+            MOVE_MINUTES,
+            AGGREGATE_MOVE_MINUTES,
+            "merge_active_minutes",
+            true
+        )
+    }
+
     private fun getTotalInInterval(
         start: Long,
         end: Long,
@@ -1660,6 +1685,7 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
             "getTotalStepsInInterval" -> getTotalStepsInInterval(call, result)
             "getTotalCaloriesInInterval" -> getTotalCaloriesInInterval(call, result)
             "getTotalDistanceInInterval" -> getTotalDistanceInInterval(call, result)
+            "getTotalMoveMinutesInInterval" -> getTotalMoveMinutesInInterval(call, result)
             "writeWorkoutData" -> writeWorkoutData(call, result)
             "writeBloodPressure" -> writeBloodPressure(call, result)
             "writeBloodOxygen" -> writeBloodOxygen(call, result)
